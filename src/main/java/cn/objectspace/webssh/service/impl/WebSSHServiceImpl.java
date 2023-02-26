@@ -23,10 +23,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
-* @Description: WebSSH业务逻辑实现
-* @Author: NoCortY
-* @Date: 2020/3/8
-*/
+ * @Description: WebSSH业务逻辑实现
+ * @Author: NoCortY
+ * @Date: 2020/3/8
+ */
 @Service
 public class WebSSHServiceImpl implements WebSSHService {
     //存放ssh连接信息的map
@@ -91,7 +91,7 @@ public class WebSSHServiceImpl implements WebSSHService {
                         logger.error("异常信息:{}", e.getMessage());
                         try {
                             //发送错误信息
-                            sendMessage(session, ("ERROR : "+e.getMessage()).getBytes());
+                            sendMessage(session, ("ERROR : " + e.getMessage()).getBytes());
                         } catch (IOException ex) {
                             logger.error("消息发送失败");
                             logger.error("异常信息:{}", ex.getMessage());
@@ -102,12 +102,15 @@ public class WebSSHServiceImpl implements WebSSHService {
             });
         } else if (ConstantPool.WEBSSH_OPERATE_COMMAND.equals(webSSHData.getOperate())) {
             String command = webSSHData.getCommand();
+            if (null == command || "".equals(command)) {
+                return;
+            }
             SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(userId);
             if (sshConnectInfo != null) {
                 try {
                     ChannelShell channel = (ChannelShell) sshConnectInfo.getChannel();
                     if (channel != null) {
-                        channel.setPtySize(webSSHData.getCols(),webSSHData.getRows(),webSSHData.getWidth(),webSSHData.getHeight());
+                        channel.setPtySize(webSSHData.getCols(), webSSHData.getRows(), webSSHData.getWidth(), webSSHData.getHeight());
                         transToSSH(channel, command);
                         if (channel.isClosed()) {
                             close(session);
@@ -118,7 +121,7 @@ public class WebSSHServiceImpl implements WebSSHService {
                     logger.error("异常信息:{}", e.getMessage());
                     try {
                         //发送错误信息
-                        sendMessage(session, ("ERROR : "+e.getMessage()).getBytes());
+                        sendMessage(session, ("ERROR : " + e.getMessage()).getBytes());
                     } catch (IOException ex) {
                         logger.error("消息发送失败");
                         logger.error("异常信息:{}", ex.getMessage());
@@ -189,7 +192,7 @@ public class WebSSHServiceImpl implements WebSSHService {
         //开启shell通道
         Channel channels = session.openChannel("shell");
         ChannelShell channel = (ChannelShell) channels;
-        channel.setPtySize(webSSHData.getCols(),webSSHData.getRows(),webSSHData.getWidth(),webSSHData.getHeight());
+        channel.setPtySize(webSSHData.getCols(), webSSHData.getRows(), webSSHData.getWidth(), webSSHData.getHeight());
 
         //通道连接 超时时间3s
         channel.connect(3000);

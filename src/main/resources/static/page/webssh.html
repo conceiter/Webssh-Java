@@ -41,10 +41,10 @@
 
     openTerminal({
         operate: 'connect',
-        host: '192.168.23.208',//IP
+        host: 'localhost',//IP
         port: '22',//端口号
         username: 'root',//用户名
-        password: 'password'//密码
+        password: 'pass'//密码
     });
 
     //terminal 大小改变
@@ -52,12 +52,6 @@
         var c = parseInt($("#outerDiv").width() / 9) - 2;
         var r = parseInt($("#outerDiv").height() / 17);
         term.resize(c, r);
-        client.send({
-            "operate": "command"
-            , "command": ''
-            , "cols": c
-            , "rows": r
-        });
     };
 
     //限制最小宽度，避免排版错乱
