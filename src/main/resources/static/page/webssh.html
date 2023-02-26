@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="utf-8">
 <head>
     <title>WebSSH</title>
     <link rel="stylesheet" href="../xterm/css/xterm.css"/>
@@ -41,10 +41,10 @@
 
     openTerminal({
         operate: 'connect',
-        host: 'localhost',//IP
+        host: '43.143.151.11',//IP
         port: '22',//端口号
         username: 'root',//用户名
-        password: 'pass'//密码
+        password: 'M118w529M305b820'//密码
     });
 
     //terminal 大小改变
@@ -126,6 +126,14 @@
                 "rows": parseInt(term.rows)
             };
             client.send(order);
+        });
+        term.onResize(function (c){
+            client.send({
+                "operate": "command",
+                "command": '',
+                "cols": c.cols,
+                "rows": c.rows
+            })
         });
 
         //执行连接操作
